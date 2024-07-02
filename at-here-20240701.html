@@ -1,0 +1,1674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>@here</title>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>@here</title>
+  <style>
+    :root {
+      --primary-color: #007BFF;
+      --secondary-color: #343a40;
+      --background-color: #f8f9fa;
+      --text-color: #343a40;
+      --border-radius: 6px;
+      --button-hover-bg: #0056b3;
+      --button-active-bg: #404040;
+      --button-active-hover-bg: #303030;
+      --card-bg: #e0e0e0;
+      --card-color: #121212;  
+      --active-bg: #e0ffe0;
+      --inactive-bg: #ffe0e0;
+      --spinner-border: rgba(0, 0, 0, 0.1);
+      --spinner-border-left: #fff;
+      --modal-bg: rgba(0, 0, 0, 0.6);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif, Arial;
+    }
+
+    body, html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: var(--background-color);
+      color: var(--text-color);
+    }
+
+    .container {
+      max-width: 600px;
+      width: 100%;
+      height: 100%;
+      padding: 20px;
+      background-color: white;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: var(--border-radius);
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      overflow: hidden;
+      position: relative;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+    }
+
+    header h1 {
+      margin: 0;
+      color: var(--secondary-color);
+      font-size: 1.5em;
+    }
+
+    header .counters {
+      font-size: 0.9em;
+      color: #6c757d;
+    }
+
+    .row-menu-search-container {
+      display: flex;
+      width: 100%;
+      height: 3em;
+      justify-content: center;
+      margin-top: 1em;
+      margin-bottom: .5em;
+    }
+
+    .row-menu-search-container input {
+      display: flex;
+      flex: 1;
+      padding: 1em;
+    }
+
+    .sensors {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      margin-top: 1em;
+    }
+
+    .sensors input {
+      margin-right: .5em;
+    }
+
+    .sensors label {
+      display: flex;
+      align-items: center;
+      margin: .2em;
+      padding: .5em;
+      border-radius: 4px;
+      cursor: pointer;
+      background-color: var(--background-color);
+    }
+
+    .sensors label.active {
+      background-color: var(--active-bg);
+    }
+
+    .sensors label.inactive {
+      background-color: var(--inactive-bg);
+    }
+
+    #sensorForm {
+      display: flex;
+      width: 100%;
+      justify-content: flex-end;
+    }
+
+    #sensorSection {
+      flex: 1;
+      padding: 1em;
+      margin-top: 1em;
+      border: 1px solid #ccc;
+      border-radius: var(--border-radius);  
+    }
+
+    #sensorList {
+      max-height: 200px;
+      overflow-y: auto;
+      border: 1px solid #ddd;
+      padding: 1em;
+    }
+
+    .snapshot-container {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      width: 100%;
+      padding: 1em;
+      margin-top: 1em;
+      border: 1px solid #ccc;
+      border-radius: var(--border-radius);
+      overflow-y: auto;
+    }
+
+    .snapshot-card {
+      display: flex;
+      flex-direction: column;
+      padding: 1em;
+      color: var(--card-color);
+      background-color: var(--card-bg);
+      border-radius: var(--border-radius);
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+      position: relative;
+      margin-bottom: 1em;
+    }
+
+    .snapshot-card:last-child {
+      margin-bottom: 0;
+    }
+
+    .snapshot-card h3 {
+      font-size: 1em;
+      margin: 0 0 10px;
+    }
+
+    .snapshot-card .key, .snapshot-card .value {
+      color: var(--card-color);
+      font-size: 1em;
+    }
+
+    .snapshot-card .value {
+      margin-right: 2em;
+    }
+
+    .snapshot-card .note {
+      white-space: pre-wrap;
+      border: 1px solid #fff;
+      text-align: left;
+      padding: .5em;
+      min-height: 3em;
+      margin-top: .5em;
+    }
+
+    .links-container {
+      margin-top: .5em;
+      margin-bottom: .5em;
+    }
+
+    .snapshot-card textarea {
+      width: 100%;
+      resize: none;
+      border-radius: var(--border-radius);
+      margin-top: 1em;
+      margin-bottom: .5em;
+      padding: 1em;
+      border: 1px solid #ccc;
+    }
+
+    .snapshot-card button {
+      padding: .5em;
+      border: none;
+      border-radius: var(--border-radius);
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+      align-self: flex-start;
+    }
+
+    .snapshot-card button:hover {
+      background-color: #45a049;
+    }
+
+    .snapshot-card .record-index {
+      position: absolute;
+      top: 1em;
+      right: 1em;
+      font-size: 1em;
+      color: var(--secondary-color);
+    }
+
+    .hamburger-menu {
+      position: relative;
+    }
+
+    .hamburger-menu button {
+      background: none;
+      border: none;
+      font-size: 1.5em;
+      cursor: pointer;
+    }
+
+    .menu-content {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      position: absolute;
+      top: 2em;
+      left: 0;
+      max-height: 90vh;
+      width: 20em;
+      background: white;
+      border: 1px solid #ccc;
+      border-radius: var(--border-radius);
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+    }
+
+    .menu-content .menu-header-container {
+      display: flex;
+      flex-direction: column;
+      border-radius: var(--border-radius);
+      background-color: var(--primary-color);
+      margin: 0;
+      padding: 0;
+    }
+
+    .menu-content .menu-commands-container {
+      display: flex;
+      flex-direction: column;
+      margin: 0;
+      padding: 0;
+      margin-top: .5em;
+      margin-bottom: .5em;
+      overflow-y: auto;
+    }
+
+    .menu-commands-container a span {
+      padding-left: 1em;
+    }
+
+    .menu-content .menu-header {
+      font-size: 2em;
+      font-weight: 300;
+      margin: 0;
+      padding-top: 1em;
+      color: white;
+      text-align: center;
+    }
+
+    .menu-content .menu-subheader {
+      font-size: 1.2em;
+      font-weight: 100;
+      font-style: italic;
+      color: white;
+      text-align: center;
+      margin-top: .5em;
+      margin-bottom: .5em;
+    }
+
+    .menu-content a {
+      display: block;
+      padding: 1em;
+      text-decoration: none;
+      color: black;
+    }
+
+    .menu-content a:hover {
+      background-color: #f0f0f0;
+    }
+
+    .menu-content a:last-child {
+      border-bottom: none;
+    }
+
+    .button-container {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    .no-match,
+    .hidden,
+    a.hidden,
+    div.row-menu-button-container.hidden,
+    div.row-menu-source-select.hidden,
+    button.btn-row-menu.hidden {
+      display: none;
+    }
+
+    button.btn-capture-sensors,
+    button.btn-share-location {
+      padding: 1em;
+      font-size: 1.5em;
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      width: 100%;
+      margin-top: 1em;
+    }
+
+    button.btn-capture-sensors:hover,
+    button.btn-share-location:hover {
+      background-color: var(--button-hover-bg);
+    }
+
+    .btn-capture-sensors.active,
+    .btn-share-location.active {
+      background-color: var(--button-active-bg);
+    }
+
+    button.btn-capture-sensors.active:hover,
+    button.btn-share-location.active:hover {
+      background-color: var(--button-active-hover-bg);
+    }
+
+    .spinner {
+      border: 2px solid var(--spinner-border);
+      border-left-color: var(--spinner-border-left);
+      border-radius: 50%;
+      width: 1em;
+      height: 1em;
+      animation: spin 1s linear infinite;
+      margin-right: 1em;
+      margin-left: 1em;
+      display: none;
+    }
+
+    .btn-capture-sensors.active .spinner,
+    .btn-share-location.active .spinner {
+      display: inline-block;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: var(--modal-bg);
+    }
+
+    .modal-content {
+      background-color: #ffffff;
+      margin: 10% auto;
+      padding: 1.5em;
+      border-radius: 6px;
+      width: 70%;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    .close,
+    .modal-close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .close:hover,
+    .close:focus,
+    .modal-close:hover,
+    .modal-close:focus {
+      color: #000;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .snapshot-details {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 20px;
+    }
+
+    .details-section {
+      width: 45%;
+    }
+
+    .details-section h3 {
+      text-align: start;
+      margin-bottom: .5em;
+    }
+
+    .card-icon-container {
+      display: flex;
+      justify-content: space-between;
+      border-top: 1px solid #ccc;
+      margin-top: 1em;
+    }
+
+    .card-icon-container .left-icons,
+    .card-icon-container .right-icons {
+      display: flex;
+    }
+
+    .icon {
+      cursor: pointer;
+      padding: .5em;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background-color: #f0f0f0;
+      transition: background-color 0.3s;
+      text-align: center;
+    }
+
+    .icon:hover {
+      background-color: #ddd;
+    }
+
+    .button-group {
+      display: flex;
+      justify-content: space-around;
+    }
+
+    .modal-btn {
+      font-size: 1em;
+      padding: .5em 1em;
+      margin: .5em;
+      border: none;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .modal-btn:hover {
+      background-color: #ddd;
+    }
+
+    #localBtn {
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    #combineBtn {
+      background-color: #2196F3;
+      color: white;
+    }
+
+    #replaceBtn {
+      background-color: #f44336;
+      color: white;
+    }
+
+    .row-menu-button-container {
+      display: flex;
+      justify-content: space-around;
+      width: 100%;
+      margin-top: 1em;
+    }
+
+    .btn-row-menu {
+      padding: 1em;
+      font-size: 1.5em;
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      width: 30%;
+      transition: background-color 0.3s;
+    }
+
+    .btn-row-menu.active {
+      background-color: var(--button-active-bg);
+    }
+
+    .btn-row-menu:hover {
+      background-color: var(--button-hover-bg);
+    }
+
+    .row-menu-button-container,
+    .row-menu-source-select {
+      display: flex;
+      justify-content: center;
+      padding: 0;
+      margin: 0;
+      margin-right: 1em;
+    }
+
+    .row-menu-source-select select {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      padding: .3em;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background-color: #f0f0f0;
+      color: var(--secondary-color);
+      transition: background-color 0.3s;
+    }
+
+    .row-menu-button-container button {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      max-width: 5em;
+      cursor: pointer;
+      padding: .5em;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background-color: #f0f0f0;
+      color: var(--secondary-color);
+      transition: background-color 0.3s;
+    }
+
+    .row-menu-button-container button:hover {
+      background-color: #ddd;
+    }
+
+    .row-menu-button-container button:first-child {
+      width: 2em;
+      margin-right: 2em;
+    }
+
+    .btn-row-menu {
+      height: 1.5em;
+      padding: 0.5em;
+      font-size: 1em;
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .btn-row-menu.active {
+      background-color: var(--button-active-bg);
+    }
+
+    .btn-row-menu:hover {
+      background-color: var(--button-hover-bg);
+    }
+
+    @media (max-width: 400px) {
+      .container {
+        padding: .5em;
+      }
+      
+      .modal-content {
+        width: 80%;
+      }
+
+      .modal-btn {
+        font-size: 1em;
+        padding: .25em .5em;
+        margin: .25em;
+      }
+      
+      .sensors label {
+        padding: .2em;
+      }
+
+      .snapshot-container {
+        margin-top: .1em;
+      }
+
+      button.btn-capture-sensors,
+      button.btn-share-location {
+        padding: 1em;
+        font-size: 1em;
+        width: 100%;
+      }
+
+      .button-container {
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+      }
+
+      .button-container button {
+        width: 100%;
+        margin-top: .5em;
+      }
+
+      .menu-content {
+        width: 15em;
+      }
+
+      .menu-content .menu-header {
+        font-size: 1.5em;
+        font-weight: 400;
+      }
+
+      .menu-content .menu-subheader {
+        font-size: 1em;
+        font-weight: 100;
+      }
+
+      .menu-content a {
+        padding: .5em;
+      }
+
+      .snapshot-container {
+        padding: .5em;
+        margin-top: 1em;
+      }
+
+      .snapshot-card {
+        padding: .5em;
+        margin-bottom: 1em;
+      }
+    }
+
+    @media (max-height: 699px) {
+      .menu-content {
+        max-height: 70vh;
+      }
+
+      .menu-content .menu-header {
+        font-size: 1.5em;
+        font-weight: 400;
+      }
+
+      .menu-content .menu-subheader {
+        font-size: 1em;
+        font-weight: 100;
+      }
+
+      .menu-content a {
+        padding: .5em;
+      }
+
+      .modal-content {
+        width: 80%;
+      }
+
+      .modal-btn {
+        font-size: 1em;
+        padding: .25em .5em;
+        margin: .25em;
+      }
+
+      .snapshot-container {
+        padding: .5em;
+        margin-top: 1em;
+      }
+
+      .snapshot-card {
+        padding: .5em;
+        margin-bottom: 1em;
+      }
+    }
+
+    .indicator {
+      display: flex;
+      color: var(--card-color);
+      padding: .5em;
+      font-size: .9em;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="hamburger-menu">
+        <button onclick="toggleHidden('menuContent')" title="Toggle Menu">&#9776;</button>
+        <div class="menu-content hidden" id="menuContent">
+        	<div class="menu-header-container">
+	          <div class="menu-header">future title page</div>
+	          <div class="menu-subheader">"catchphrase goes here"</div>
+	        </div>
+          <div class="menu-commands-container">  
+	          <a href="#" class="hidden" onclick="futureUse()" title="Display current location">&#127964; <span>Current Location</span></a>
+	          <a href="#" class="hidden" onclick="futureUse()" title="Display saved location snapshot-cards container">&#128269; <span>Saved Locations</span></a>
+	          <a href="#" class="hidden" onclick="futureUse()" title="Display current location">&#127758; <span>Current Location</span></a>
+	          <a href="#" class="hidden" onclick="futureUse()" title="Executes Save Location">&#128204; <span>Add New Location</span></a>
+	          <a href="#" class="hidden" onclick="futureUse()" title="Display saved location snapshot-cards filtered by Favorite Flag">&#9733; <span>Favorites</span></a>
+	          <a href="#" class="hidden" onclick="futureUse()" title="Select which sensors to use">&#9881; <span>Settings</span></a>
+	          <a href="#" onclick="saveSnapshotsToFile();toggleHidden('menuContent')" title="Save local storage snapshots to a file">&#128190; <span>Save Snapshots</span></a>
+	          <a href="#" onclick="saveToFile('snapshots', 'savedSnapshots.js', true);toggleHidden('menuContent')" title="Export local storage snapshots to directory">&#128228; <span>Export Data</span></a>	          
+<!--        <a href="#" onclick="loadSnapshotsFromFile();toggleHidden('menuContent')" title="Load locations snapshots from a file">&#128229; <span>Import Data</span></a> -->
+	          <a href="#" onclick="loadSnapshots(true);toggleHidden('menuContent')" title="Load locations snapshots from a file">&#128229; <span>Import Data</span></a>	          
+	          <a href="#" onclick="clearSnapshots();toggleHidden('menuContent')" title="Clear all local storage snapshot locations">&#128465; <span>Clear Data</span></a>
+	          <a href="#" onclick="toggleHidden('sensorSection');toggleHidden('menuContent')" title="Select which sensors to save">&#128241; <span>Select Sensors</span></a>
+	          <a href="#" onclick="toggleHidden('rowMenuSourceSelect');toggleHidden('menuContent')" title="Select Map Links">&#128506;<span>Select Map Links</span></a> <!-- links &#128279; -->
+	          <a href="#" onclick="toggleHidden('searchInputContainer');toggleHidden('menuContent')" title="Toggle Location List Search Bar">&#128270; <span>Search Location List</span></a>
+	          <a href="#" onclick="copyAllSnapshotsToClipboard();toggleHidden('menuContent')" title="Copy all local storage location snapshots to clipboard">&#128203; <span>Copy All Locations</span></a>
+	          <a href="https://github.com/aznight85048/at-here" target="_blank" onclick="toggleHidden('menuContent')" title="Feedback is Appreciated">&#128172; <span>gitHub/@here</span></a>
+	        </div>
+	      </div>
+      </div>
+
+			<div class="row-menu-button-container">
+			  <button type="button" class="btn-row-menu hidden" onclick="toggleView('settingsSection', this)">&#9881;</button>
+			  <button type="button" class="btn-row-menu hidden" onclick="toggleView('listSection', this)">List</button>
+			  <button type="button" class="btn-row-menu" onclick=" window.open(waypoints)" title="map all locations">Map</button>
+			</div>
+
+			<div class="row-menu-source-select hidden" id="rowMenuSourceSelect">
+			  <select id="mapSourceSelect" onchange="displaySnapshots();">
+			    <!-- options will be added here -->	
+			  </select>
+			</div>
+			
+      <h1>@here</h1>
+    </header>
+
+    <div class="row-menu-search-container hidden" id="searchInputContainer">
+        <input type="text" id="searchInput" placeholder="Search locations">
+    </div>
+
+    <form id="sensorForm">
+      <section id="sensorSection" class="hidden">
+      	<span class="close" onclick="toggleHidden('sensorSection');">&times;</span>
+        <h2>Available Sensors</h2>
+        <div class="sensors" id="sensorList">
+          <!-- Sensors will be dynamically populated here -->
+        </div>
+      </section>
+    </form>
+    <div class="snapshot-container" id="snapshotContainer">
+      <!-- snapshot-cards will be dynamically populated here -->        
+
+      <div class="snapshot-card">Location 1
+        <div class="card-icon-container">
+          <div class="left-icons">
+            <i class="icon" title="Map" onclick="mapFunction(this)">&#x1F4CD;</i>
+            <i class="icon" title="Directions" onclick="directionsFunction(this)">&#x1F5FA;</i>
+            <i class="icon" title="Copy" onclick="copyFunction(this)">&#x1F4CB;</i>
+            <i class="icon" title="Edit" onclick="editFunction(this)">&#x270F;</i>
+			      <i class="icon" title="Cancel Edit" onclick="cancelFunction(this)">&#x274C;</i>
+			      <i class="icon" title="Save Edit" onclick="saveFunction(this)">&#x1F4BE;</i>
+          </div>
+          <div class="right-icons">
+            <i class="icon" title="Delete" onclick="deleteFunction(this)">&#x1F5D1;</i>
+          </div>
+        </div>
+      </div>  
+      <div class="snapshot-card">Location 2</div>
+      <div class="snapshot-card">Location 3</div>
+      <div class="snapshot-card">Location 4</div>
+
+    </div>
+    <div class="button-container">
+      <button type="button" class="btn-capture-sensors" onclick="captureSensors()">
+        Save Location
+        <div class="spinner"></div>
+      </button>
+      <button type="button" class="btn-share-location hidden" onclick="shareLocation()">
+        Share Location
+        <div class="spinner"></div>
+      </button>
+    </div>
+
+    <div id="snapshotModal" class="modal">
+      <div class="modal-content">
+        <span class="modal-close" onclick="toggleHidden('snapshotModal')">&times;</span>
+        <h2>Compare Snapshots</h2>
+        <div class="snapshot-details">
+          <div class="details-section">
+            <h3>Local Storage</h3>
+            <p id="localDetails"></p>
+          </div>
+          <div class="details-section">
+            <h3>Saved Snapshots</h3>
+            <p id="savedDetails"></p>
+          </div>
+        </div>
+        <div class="button-group">
+          <button id="localBtn" class="modal-btn">Use Local Storage</button>
+          <button id="combineBtn" class="modal-btn">Combine Snapshots</button>
+          <button id="replaceBtn" class="modal-btn">Replace with Saved</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+  const sourcesData = {
+    "sources": {
+      "google": {
+        "viewMapUrl": "https://www.google.com/maps/search/?api=1&query={latitude},{longitude}",
+        "directionsUrl": "https://www.google.com/maps/dir/?api=1&destination={latitude},{longitude}",
+        "waypointsUrl": "https://www.google.com/maps/dir/?api=1&waypoints={latitude},{longitude}",
+        "waypointsAdd": "|{latitude},{longitude}"
+      },
+      "bing": {
+        "viewMapUrl": "https://www.bing.com/maps?q={latitude},{longitude}",
+        "directionsUrl": "https://www.bing.com/maps?rtp=~pos.{latitude}_{longitude}",
+        "waypointsUrl": "https://www.bing.com/maps?rtp=pos.{latitude}_{longitude}",
+        "waypointsAdd": "~pos.{latitude}_{longitude}"
+      },
+      "openstreetmap": {
+        "viewMapUrl": "https://www.openstreetmap.org/?mlat={latitude}&mlon={longitude}",
+        "directionsUrl": "https://www.openstreetmap.org/directions?engine=fossgis_osrm_car&route=;{latitude},{longitude}",
+        "waypointsUrl": "https://www.openstreetmap.org",
+        "waypointsAdd": ""
+      }
+    }
+  };
+</script>
+
+<script>  // beg at-here functions
+document.addEventListener('DOMContentLoaded', () => {
+  buildSourceSelector();
+  populateSensorList();
+  displaySnapshots();
+  checkSavedSnapshots();
+});
+
+async function populateSensorList() {
+  const sensorList = document.getElementById('sensorList');
+  const sensors = [];
+
+  // Check for geolocation
+  if ('geolocation' in navigator) {
+    sensors.push({name: 'Location', supported: true, defaultChecked: true});
+    sensors.push({name: 'Speed', supported: true});
+    sensors.push({name: 'Altitude', supported: true});
+  }
+
+  // Check for various sensor APIs
+  const sensorChecks = [
+    {name: 'Accelerometer', class: 'Accelerometer'},
+    {name: 'Gyroscope', class: 'Gyroscope'},
+    {name: 'Magnetometer', class: 'Magnetometer'},
+    {name: 'Proximity', class: 'ProximitySensor'},
+    {name: 'Ambient Light', class: 'AmbientLightSensor'},
+    {name: 'Barometer', class: 'Barometer'},
+    {name: 'Orientation', class: 'AbsoluteOrientationSensor'},
+    {name: 'Device Motion', class: 'DeviceMotionEvent'},
+    {name: 'Device Orientation', class: 'DeviceOrientationEvent'}
+  ];
+
+  for (const sensor of sensorChecks) {
+    try {
+      if (sensor.class in window) {
+        sensors.push({name: sensor.name, supported: true});
+      } else {
+        sensors.push({name: sensor.name, supported: false});
+      }
+    } catch (e) {
+      sensors.push({name: sensor.name, supported: false});
+    }
+  }
+
+  // Check for battery status API
+  if ('getBattery' in navigator) {
+    sensors.push({name: 'Battery Status', supported: true});
+  }
+
+  // Check permissions for certain sensors (if necessary)
+  for (const sensor of sensors) {
+    const label = document.createElement('label');
+    label.innerHTML = `<input type="checkbox" name="sensor" value="${sensor.name}" ${sensor.defaultChecked ? 'checked' : ''}> ${sensor.name}`;
+
+    if (sensor.supported) {
+      label.classList.add('active');
+    } else {
+      label.classList.add('inactive');
+    }
+
+    sensorList.appendChild(label);
+  }
+}
+
+let waypoints = '';
+
+function captureSensors() {
+  const button = document.querySelector('.btn-capture-sensors');
+  button.classList.add('active');
+
+  try {
+    const form = document.getElementById('sensorForm');
+    const selectedSensors = Array.from(form.elements['sensor'])
+      .filter(checkbox => checkbox.checked)
+      .map(checkbox => checkbox.value);
+
+    if (selectedSensors.length === 0) {
+      alert('Please select at least one sensor.');
+      button.classList.remove('active');
+      return;
+    }
+
+    const timestamp = new Date().toLocaleString();
+    const snapshot = {
+      sensors: selectedSensors,
+      timestamp: timestamp,
+      note: ''
+    };
+
+    if (selectedSensors.includes('Location') || selectedSensors.includes('Speed') || selectedSensors.includes('Altitude')) {
+      navigator.geolocation.getCurrentPosition(
+        position => {
+          snapshot.location = {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude
+          };
+          if (selectedSensors.includes('Speed')) {
+            snapshot.speed = position.coords.speed;
+          }
+          if (selectedSensors.includes('Altitude')) {
+            snapshot.altitude = position.coords.altitude;
+          }
+          saveSnapshotToLocalStorage(snapshot);
+          displaySnapshots();
+          button.classList.remove('active');
+        },
+        error => {
+          alert('Error capturing geolocation: ' + error.message);
+          button.classList.remove('active');
+        }
+      );
+    } else {
+      saveSnapshotToLocalStorage(snapshot);
+      displaySnapshots();
+      button.classList.remove('active');
+    }
+  } catch (error) {
+    alert('An error occurred: ' + error.message);
+    button.classList.remove('active');
+  }
+}
+
+function saveSnapshotToLocalStorage(snapshot) {
+  let snapshots = JSON.parse(localStorage.getItem('snapshots')) || [];
+  snapshots.push(snapshot);
+  localStorage.setItem('snapshots', JSON.stringify(snapshots));
+}
+
+function displaySnapshots() {
+  const snapshotContainer = document.getElementById('snapshotContainer');
+  snapshotContainer.innerHTML = '';
+  waypoints = '';
+
+  const selectedSource = document.getElementById('mapSourceSelect').value;
+  const sourceData = sourcesData.sources[selectedSource];
+  if (!sourceData) {
+    console.error('Unsupported map source:', selectedSource);
+  }
+
+  const snapshots = JSON.parse(localStorage.getItem('snapshots')) || [];
+
+  snapshots.forEach((snapshot, index) => {
+    const card = document.createElement('div');
+    card.className = 'snapshot-card';
+    let indent = 0;
+
+    const recordIndex = document.createElement('div');
+    recordIndex.className = 'record-index';
+    recordIndex.textContent = `#${index + 1}`;
+    card.appendChild(recordIndex);
+
+    const readableTimestamp = new Date(snapshot.timestamp).toLocaleString();
+
+    Object.keys(snapshot).forEach(key => {
+      if (key !== 'sensors' && key !== 'note') {
+        const value = snapshot[key];
+        console.log('snapshot-card:', recordIndex.textContent, key, value);
+
+        const div = document.createElement('div');
+        div.style.paddingLeft = `${indent}px`;
+
+        if (typeof value === 'object' && value !== null) {
+          div.innerHTML = `<span class="key">${capitalize(key)}:</span>`;
+          card.appendChild(div);
+          // Display the properties of the child object
+          Object.keys(value).forEach(childKey => {
+            const childValue = value[childKey];
+            const childDiv = document.createElement('div');
+            childDiv.style.paddingLeft = `${indent + 20}px`;
+            if (typeof childValue === 'object' && childValue !== null) {
+              childDiv.innerHTML = `<span class="key">${capitalize(childKey)}:</span>`;
+              card.appendChild(childDiv);
+              // Optionally, handle further nesting here if needed
+            } else {
+              childDiv.innerHTML = `<span class="key">${capitalize(childKey)}:</span> <span class="value">${childValue}</span>`;
+              card.appendChild(childDiv);
+            }
+          });
+        } else {
+          if (key === 'timestamp') {
+            div.innerHTML = `<span class="key">${capitalize(key)}:</span> <span class="value">${readableTimestamp}</span>`;
+            card.appendChild(div);
+          } else {
+            div.innerHTML = `<span class="key">${capitalize(key)}:</span> <span class="value">${value}</span>`;
+            card.appendChild(div);
+          }
+        }
+
+        if (key === 'location') {
+          const linksContainer = document.createElement('div');
+          linksContainer.className = 'links-container';
+
+          const mapLink = document.createElement('a');
+          mapLink.href = sourceData.viewMapUrl.replace('{latitude}', value.latitude).replace('{longitude}', value.longitude);
+          mapLink.target = '_blank';
+          mapLink.textContent = `View Map`;
+          mapLink.style.paddingLeft = `${indent + 20}px`;
+          linksContainer.appendChild(mapLink);
+
+          const directionsLink = document.createElement('a');
+          directionsLink.href = sourceData.directionsUrl.replace('{latitude}', value.latitude).replace('{longitude}', value.longitude);
+          directionsLink.target = '_blank';
+          directionsLink.textContent = `Get Directions`;
+          directionsLink.style.paddingLeft = `${indent + 20}px`;
+          linksContainer.appendChild(directionsLink);
+
+          card.appendChild(linksContainer);
+          if (!waypoints) {
+            waypoints = sourceData.waypointsUrl.replace('{latitude}', value.latitude).replace('{longitude}', value.longitude);
+          } else {
+            waypoints += sourceData.waypointsAdd.replace('{latitude}', value.latitude).replace('{longitude}', value.longitude);
+          }
+          console.log('waypoints:', waypoints);
+        }
+      }
+    });
+
+    const note = document.createElement('pre');
+    note.classList.add('note');
+    note.contentEditable = false;
+    note.title = 'location note';
+    note.innerHTML = snapshot.note || ''; // Use innerHTML to preserve whitespace
+    card.appendChild(note);
+
+    // Create the card-icon-container
+    const cardIconContainer = document.createElement('div');
+    cardIconContainer.className = 'card-icon-container';
+
+    const leftIcons = document.createElement('div');
+    leftIcons.className = 'left-icons';
+
+    const mapIcon = document.createElement('i');
+    mapIcon.className = 'icon';
+    mapIcon.title = `Map (${selectedSource})`;
+    mapIcon.innerHTML = '&#x1F4CD;';
+    mapIcon.onclick = () => window.open(sourceData.viewMapUrl.replace('{latitude}', snapshot.location.latitude).replace('{longitude}', snapshot.location.longitude), '_blank');
+    leftIcons.appendChild(mapIcon);
+
+    const directionsIcon = document.createElement('i');
+    directionsIcon.className = 'icon';
+    directionsIcon.title = `Directions (${selectedSource})`;
+    directionsIcon.innerHTML = '&#x1F5FA;';
+    directionsIcon.onclick = () => window.open(sourceData.directionsUrl.replace('{latitude}', snapshot.location.latitude).replace('{longitude}', snapshot.location.longitude), '_blank');
+    leftIcons.appendChild(directionsIcon);
+
+    const copyIcon = document.createElement('i');
+    copyIcon.className = 'icon';
+    copyIcon.title = 'Copy';
+    copyIcon.innerHTML = '&#x1F4CB;';
+    copyIcon.onclick = () => copySnapshotToClipboard(card);
+    leftIcons.appendChild(copyIcon);
+
+    const editIcon = document.createElement('i');
+    editIcon.className = 'icon';
+    editIcon.title = 'Edit';
+    editIcon.innerHTML = '&#x270F;';
+    editIcon.onclick = () => editNoteHandler(index, note);
+    leftIcons.appendChild(editIcon);
+
+    const cancelIcon = document.createElement('i');
+    cancelIcon.className = 'icon hidden';
+    cancelIcon.title = 'Cancel Edit';
+    cancelIcon.innerHTML = '&#x274C;';
+    cancelIcon.onclick = () => cancelNoteHandler(index, note);
+    leftIcons.appendChild(cancelIcon);
+
+    const saveIcon = document.createElement('i');
+    saveIcon.className = 'icon hidden';
+    saveIcon.title = 'Save Edit';
+    saveIcon.innerHTML = '&#x1F4BE;';
+    saveIcon.onclick = () => saveNoteHandler(index, note);
+    leftIcons.appendChild(saveIcon);
+
+    cardIconContainer.appendChild(leftIcons);
+
+    const rightIcons = document.createElement('div');
+    rightIcons.className = 'right-icons';
+
+    const deleteIcon = document.createElement('i');
+    deleteIcon.className = 'icon';
+    deleteIcon.title = 'Delete';
+    deleteIcon.innerHTML = '&#x1F5D1;';
+    deleteIcon.onclick = () => deleteSnapshot(index);
+    rightIcons.appendChild(deleteIcon);
+
+    cardIconContainer.appendChild(rightIcons);
+
+    card.appendChild(cardIconContainer);
+
+    snapshotContainer.appendChild(card);
+  });
+
+  // Scroll to the last added snapshot
+  snapshotContainer.scrollTop = snapshotContainer.scrollHeight;
+}
+
+function capitalize(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+function editNoteHandler(index, noteDiv) {
+  noteDiv.contentEditable = true;
+  noteDiv.focus();
+  // Show save and cancel icons
+  const icons = noteDiv.parentElement.querySelectorAll('.icon.hidden');
+  icons.forEach(icon => icon.classList.remove('hidden'));
+  // Hide edit icon
+  const editIcon = noteDiv.parentElement.querySelector('.icon[title="Edit"]');
+  editIcon.classList.add('hidden');
+}
+
+function cancelNoteHandler(index, noteDiv) {
+  noteDiv.contentEditable = false;
+
+  // Fetch current snapshots from localStorage
+  const snapshots = JSON.parse(localStorage.getItem('snapshots')) || [];
+
+  // Retrieve the original note content and set it to noteDiv
+  // Ensure that the snapshots array and the specific note exist before accessing them
+  if (snapshots[index] && snapshots[index].note) {
+    noteDiv.innerHTML = snapshots[index].note;
+  } else {
+    noteDiv.innerHTML = '';
+  }
+
+  // Hide save and cancel icons
+  const icons = noteDiv.parentElement.querySelectorAll('.icon[title="Save Edit"], .icon[title="Cancel Edit"]');
+  icons.forEach(icon => icon.classList.add('hidden'));
+
+  // Show edit icon
+  const editIcon = noteDiv.parentElement.querySelector('.icon[title="Edit"]');
+  editIcon.classList.remove('hidden');
+
+  // Show cancel indicator
+  showIndicator(icons[0], '...Edit Cancel');
+}
+
+function saveNoteHandler(index, noteDiv) {
+  // Disable editing
+  noteDiv.contentEditable = false;
+
+  // Fetch current snapshots from localStorage or initialize an empty array if it doesn't exist
+  const snapshots = JSON.parse(localStorage.getItem('snapshots')) || [];
+
+  // Log the note content for debugging purposes
+  console.log('noteDiv.innerHTML:', noteDiv.innerHTML, 'noteDiv.textContent:', noteDiv.textContent);
+
+  // Update the snapshot with the current note content using innerHTML
+  // This will preserve the whitespace formatting
+  snapshots[index].note = noteDiv.innerHTML;
+
+  // Log the updated note for debugging purposes
+  console.log('snapshots[index].note:', snapshots[index].note);
+
+  // Save the updated snapshots back to localStorage
+  localStorage.setItem('snapshots', JSON.stringify(snapshots));
+
+  // Hide save and cancel icons
+  const icons = noteDiv.parentElement.querySelectorAll('.icon[title="Save Edit"], .icon[title="Cancel Edit"]');
+  icons.forEach(icon => icon.classList.add('hidden'));
+
+  // Show edit icon
+  const editIcon = noteDiv.parentElement.querySelector('.icon[title="Edit"]');
+  editIcon.classList.remove('hidden');
+
+  // Show save indicator
+  showIndicator(icons[0], '...Edit Saved');
+}
+
+function deleteSnapshot(index) {
+  const confirmation = confirm('Are you sure you want to delete this snapshot?');
+  if (confirmation) {
+    const snapshots = JSON.parse(localStorage.getItem('snapshots')) || [];
+    snapshots.splice(index, 1);
+    localStorage.setItem('snapshots', JSON.stringify(snapshots));
+    displaySnapshots();
+  }
+}
+
+function showIndicator(referenceElement, message) {
+  console.log('showIndicator(referenceElement, message):', referenceElement, message);
+  const indicator = document.createElement('div');
+  indicator.textContent = message;
+  indicator.classList.add('indicator');
+  // Append the indicator as a sibling of the referenceElement
+  referenceElement.parentElement.appendChild(indicator);
+  setTimeout(() => {
+    indicator.remove();
+  }, 2000); // Display for 2 seconds
+}
+
+function copySnapshotToClipboard(card) {
+  // Create a temporary container to hold the content to be copied
+  const tempContainer = document.createElement('div');
+
+  // Clone the card to the temporary container
+  const clonedCard = card.cloneNode(true);
+
+  // Handle links explicitly to ensure they are included properly
+  const linksContainer = clonedCard.querySelector('.links-container');
+  let linksTextArray = [];
+
+  if (linksContainer) {
+    const links = linksContainer.querySelectorAll('a');
+
+    links.forEach(link => {
+      const label = link.textContent || link.innerText || link.getAttribute('aria-label');
+      const href = link.href;
+      if (label && href) {
+        linksTextArray.push(`${label}: ${href}`);
+      }
+    });
+  }
+
+  // Remove all the buttons and icons from the cloned card
+  clonedCard.querySelectorAll('.card-icon-container, .icon, a[href]').forEach(element => element.remove());
+
+  // Append the cloned card content to the temporary container
+  tempContainer.appendChild(clonedCard);
+
+  // Append the links text as separate text nodes to the temporary container
+  linksTextArray.forEach(linkText => {
+    const linkTextNode = document.createTextNode(linkText);
+    tempContainer.appendChild(linkTextNode);
+    tempContainer.appendChild(document.createElement('br'));  // Ensure each link is on a new line
+  });
+
+  // Append the temporary container to the body (it needs to be in the document to be selected)
+  document.body.appendChild(tempContainer);
+
+  // Create a range and select the content of the temporary container
+  const range = document.createRange();
+  range.selectNodeContents(tempContainer);
+  const selection = window.getSelection();
+  selection.removeAllRanges();
+  selection.addRange(range);
+
+  // Execute the copy command
+  document.execCommand('copy');
+
+  // Clean up: remove the temporary container and clear the selection
+  document.body.removeChild(tempContainer);
+  selection.removeAllRanges();
+
+  // Find the copy icon in the card to use as the reference element for the indicator
+  const copyIcon = card.querySelector('.icon[title="Copy"]');
+  // Show copied indicator
+  if (copyIcon) {
+    showIndicator(copyIcon, '...copied to clipboard');
+  } else {
+    console.warn('No icon found to show the indicator.');
+  }
+}
+
+
+  function copyAllSnapshotsToClipboard() {
+    const snapshots = JSON.parse(localStorage.getItem('snapshots')) || [];
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      const snapshotsText = JSON.stringify(snapshots, null, 2);
+
+      navigator.clipboard.writeText(snapshotsText)
+        .then(() => {
+          alert('All snapshots copied to clipboard!');
+        })
+        .catch(err => {
+          console.error('Failed to copy snapshots to clipboard: ', err);
+          alert('Failed to copy snapshots to clipboard: ' + err.message);
+        });
+    } else {
+      console.error('Clipboard API not supported.');
+      alert('Clipboard API not supported in this browser.');
+    }
+  }
+
+  function copySnapshotsContainerToClipboard() {
+    const snapshots = JSON.parse(localStorage.getItem('snapshots')) || [];
+    let content = '';
+
+    snapshots.forEach(snapshot => {
+      content += `Timestamp: ${snapshot.timestamp}\nSensors: ${snapshot.sensors.join(', ')}\n`;
+
+      if (snapshot.location) {
+        content += `Location: Lat ${snapshot.location.latitude}, Lng ${snapshot.location.longitude}\n`;
+      }
+
+      if (snapshot.speed !== undefined) {
+        content += `Speed: ${snapshot.speed} m/s\n`;
+      }
+
+      if (snapshot.altitude !== undefined) {
+        content += `Altitude: ${snapshot.altitude} m\n`;
+      }
+
+      content += `Note: ${snapshot.note}\n\n`;
+    });
+
+    navigator.clipboard.writeText(content).then(() => {
+      alert('All snapshots copied to clipboard');
+    }).catch(err => {
+      console.error('Could not copy text: ', err);
+    });
+  }
+
+  function saveSnapshotsToFile() {
+    const snapshots = JSON.parse(localStorage.getItem('snapshots')) || [];
+    const scriptContent = `const savedSnapshots = ${JSON.stringify(snapshots, null, 2)};`;
+
+    const blob = new Blob([scriptContent], { type: 'text/javascript' });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'savedSnapshots.js';
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function loadSnapshotsFromFile() {
+    const script = document.createElement('script');
+    script.src = 'savedSnapshots.js';
+    script.onload = () => {
+      if (typeof savedSnapshots !== 'undefined') {
+        compareSnapshots(savedSnapshots);
+      } else {
+        alert('No saved snapshots found in savedSnapshots.js');
+      }
+    };
+    document.body.appendChild(script);
+  }
+
+  function compareSnapshots(savedSnapshots) {
+    const localSnapshots = JSON.parse(localStorage.getItem('snapshots')) || [];
+
+    const localCount = localSnapshots.length;
+    const savedCount = savedSnapshots.length;
+
+    const localLastTimestamp = localCount > 0 ? localSnapshots[localCount - 1].timestamp : 'N/A';
+    const savedLastTimestamp = savedCount > 0 ? savedSnapshots[savedCount - 1].timestamp : 'N/A';
+
+    document.getElementById('localDetails').innerText = `Records: ${localCount}, \nLast Timestamp: \n${localLastTimestamp}`;
+    document.getElementById('savedDetails').innerText = `Records: ${savedCount}, \nLast Timestamp: \n${savedLastTimestamp}`;
+
+    const modal = document.getElementById('snapshotModal');
+    modal.style.display = 'block';
+
+    const span = document.getElementsByClassName('modal-close')[0];
+    span.onclick = function() {
+      modal.style.display = 'none';
+    }
+
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        modal.style.display = 'none';
+      }
+    }
+
+    document.getElementById('localBtn').onclick = function() {
+      modal.style.display = 'none';
+      displaySnapshots();
+    };
+
+    document.getElementById('combineBtn').onclick = function() {
+      const combinedSnapshots = [...localSnapshots, ...savedSnapshots];
+      const uniqueSnapshots = Array.from(new Set(combinedSnapshots.map(snapshot => snapshot.timestamp)))
+        .map(timestamp => combinedSnapshots.find(snapshot => snapshot.timestamp === timestamp));
+      localStorage.setItem('snapshots', JSON.stringify(uniqueSnapshots));
+      modal.style.display = 'none';
+      displaySnapshots();
+    };
+
+    document.getElementById('replaceBtn').onclick = function() {
+      localStorage.setItem('snapshots', JSON.stringify(savedSnapshots));
+      modal.style.display = 'none';
+      displaySnapshots();
+    };
+  }
+
+  function clearSnapshots() {
+    const confirmation = confirm('Are you sure you want to delete all snapshots?');
+    if (confirmation) {
+      localStorage.removeItem('snapshots');
+      displaySnapshots();
+    }
+  }
+
+  function checkSavedSnapshots() {
+    const script = document.createElement('script');
+    script.src = 'savedSnapshots.js';
+    script.onload = () => {
+      if (typeof savedSnapshots !== 'undefined') {
+        compareSnapshots(savedSnapshots);
+      }
+    };
+    document.body.appendChild(script);
+  }
+</script>
+
+<script>
+  function toggleHidden(elementId) {
+    const element = document.getElementById(elementId);
+    element.classList.toggle('hidden');
+  }
+
+  document.addEventListener('click', function(event) {
+    const menuContent = document.getElementById('menuContent');
+    const isClickInsideMenu = menuContent.contains(event.target);
+    const isClickOnMenuButton = event.target.closest('.hamburger-menu');
+
+    if (!isClickInsideMenu && !isClickOnMenuButton) {
+      menuContent.classList.add('hidden');
+    }
+  });
+
+  function futureUse() {
+    alert("This feature is not yet implemented.");
+  }
+
+  function shareLocation() {
+    alert("Sharing location...");
+  }
+</script>
+
+<script>
+  function mapFunction(parentElement) {
+    console.log("Map function called on", parentElement);
+  }
+
+  function directionsFunction(parentElement) {
+    console.log("Directions function called on", parentElement);
+  }
+
+  function editFunction(parentElement) {
+    console.log("Edit function called on", parentElement);
+  }
+
+  function copyFunction(parentElement) {
+    console.log("Copy function called on", parentElement);
+  }
+
+  function deleteFunction(parentElement) {
+    console.log("Delete function called on", parentElement);
+  }
+</script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const snapshotContainer = document.getElementById('snapshotContainer');
+    let previousSelected = null;
+
+    snapshotContainer.addEventListener('click', (event) => {
+      const target = event.target;
+
+      if (!target.classList.contains('snapshot-card')) {
+        return;
+      }
+
+      const isCtrlPressed = event.ctrlKey;
+
+      document.querySelectorAll('.snapshot-card').forEach(card => {
+        if (!isCtrlPressed) {
+          card.classList.remove('previous-selected', 'ctrl-selected');
+          card.classList.replace('selected', 'previous-selected');
+        }
+        if (isCtrlPressed) {
+          card.classList.remove('previous-selected');
+          card.classList.replace('selected', 'ctrl-selected');
+        }
+      });
+
+      if (isCtrlPressed) {
+        console.log('isCtrlPressed:', isCtrlPressed);
+        console.log('target.className:', target.className);
+
+        if (target.classList.contains('selected') ||
+            target.classList.contains('previous-selected') ||
+            target.classList.contains('ctrl-selected')) {
+          target.classList.remove('selected', 'previous-selected', 'ctrl-selected');
+          console.log('...toggle off: *selected');
+        } else {
+          console.log('...add: selected');
+          target.classList.add('selected');
+          target.classList.remove('previous-selected');
+        }
+      } else {
+        console.log('...add: selected');
+        target.classList.add('selected');
+        target.classList.remove('previous-selected');
+      }
+    });
+  });
+</script>
+
+<script>
+  document.getElementById('searchInput').addEventListener('input', function() {
+    const searchValue = this.value.toLowerCase();
+    const snapshotCards = document.querySelectorAll('.snapshot-card');
+
+    snapshotCards.forEach(card => {
+      const cardText = card.textContent.toLowerCase();
+      if (cardText.includes(searchValue)) {
+        card.classList.remove('no-match');
+      } else {
+        card.classList.add('no-match');
+      }
+    });
+  });
+</script>
+
+<script>
+  function saveToFile(dataKey, fileName, promptUser = false) {
+    const data = JSON.parse(localStorage.getItem(dataKey)) || [];
+    const scriptContent = `const savedSnapshots = ${JSON.stringify(data, null, 2)};`;
+
+    const blob = new Blob([scriptContent], { type: 'application/javascript' });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+
+    if (promptUser) {
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    } else {
+      a.click();
+    }
+
+    URL.revokeObjectURL(url);
+  }
+</script>
+
+<script>
+  function loadSnapshots(promptUser = false) {
+    if (promptUser) {
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = 'application/javascript';
+
+      input.onchange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            const scriptContent = e.target.result;
+            executeScriptContent(scriptContent);
+          };
+          reader.readAsText(file);
+        }
+      };
+
+      input.click();
+    } else {
+      const script = document.createElement('script');
+      script.src = 'savedSnapshots.js';
+      script.onload = () => {
+        if (typeof savedSnapshots !== 'undefined') {
+          compareSnapshots(savedSnapshots);
+        } else {
+          alert('No saved snapshots found in savedSnapshots.js');
+        }
+      };
+      document.body.appendChild(script);
+    }
+  }
+
+  function executeScriptContent(scriptContent) {
+    try {
+      const script = document.createElement('script');
+      script.textContent = scriptContent;
+      document.body.appendChild(script);
+
+      if (typeof savedSnapshots !== 'undefined') {
+        compareSnapshots(savedSnapshots);
+      } else {
+        alert('No saved snapshots found in the loaded file.');
+      }
+
+      document.body.removeChild(script);
+    } catch (error) {
+      alert('Error executing the script content.');
+    }
+  }
+</script>
+
+<script>
+  function buildSourceSelector() {
+    const selectElement = document.getElementById('mapSourceSelect');
+    const sources = sourcesData.sources;
+
+    selectElement.innerHTML = '';
+
+    Object.keys(sources).forEach((sourceKey, index) => {
+      const option = document.createElement('option');
+      option.value = sourceKey;
+      option.textContent = sourceKey.charAt(0).toUpperCase() + sourceKey.slice(1) + ' Maps';
+      selectElement.appendChild(option);
+
+      if (index === 0) {
+        option.selected = true;
+      }
+    });
+  }
+</script>
+</body>
+</html>
